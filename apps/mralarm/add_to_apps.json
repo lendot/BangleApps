@@ -1,0 +1,15 @@
+// Create an entry in apps.json as follows:
+{ "id": "mralarm",
+  "name": "Alarm widget that can specify day(s) to alarm",
+  "shortName":"MrAlarm",
+  "icon": "widget.png",
+  "version":"0.01",
+  "description": "A detailed description of my great widget",
+  "tags": "widget",
+  "type": "widget",
+  "readme": "README.md",
+  "storage": [
+      {"name":"mralarm.wid.js","url":"widget.js"},
+      {"name":"mralarm.app.js","url":"app.js"}
+  ]
+}

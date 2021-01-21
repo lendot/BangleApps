@@ -17,7 +17,7 @@
   // get a decimal representation of current time
   // e.g. 12:30 = 12.5, 7:12 = 7.2
   function getDecimalTime(t) {
-    return t.getHours()+(t.getMinutes()/60)
+    return t.getHours()+(t.getMinutes()/60)+(t.getSeconds()/3600);
   }
   
   // get time delta between two decimal time values, in ms

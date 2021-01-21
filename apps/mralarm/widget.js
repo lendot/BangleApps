@@ -70,6 +70,8 @@
     function doAlarm() {
 	alarmTimerId = null;
 
+	let buzzCount = 10;
+	
 	if (updateTimerId != null) {
 	    // stop updates while we're alarming
 	    clearTimeout(updateTimerId);
@@ -82,6 +84,7 @@
 	    title:"ALARM!",
 	    buttons: {"Sleep":true,"Ok":false}
 	}).then(function(sleep) {
+	    buzzCount = 0;
 	    if (sleep) {
 		snooze(10);
 	    } else {
@@ -90,6 +93,22 @@
 	    }
 	});
 	
+	function buzz() {
+	    Bangle.buzz(100).then(()=>{
+		setTimeout(()=>{
+		    Bangle.buzz(100).then(function() {
+			if (buzzCount--)
+			    setTimeout(buzz, 3000);
+			else if(alarm.as) { // auto-snooze
+			    buzzCount = 10;
+			    setTimeout(buzz, 600000);
+			}
+		    });
+		},100);
+	    });
+	}
+	buzz();
+
     }
 
     updateAlarms();

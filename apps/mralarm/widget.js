@@ -2,6 +2,8 @@
   const s = require('Storage');
   
   const ALARMS_FILE = "mralarm.json";
+  const ACTIVE_ALARM_FILE = "mralarm.active.json";
+
   const ALARMS_UPDATE_TIME = 5; // time between alarms file updates (in mins)
   
   let alarms;
@@ -18,21 +20,13 @@
   // e.g. 12:30 = 12.5, 7:12 = 7.2
   function getDecimalTime(t) {
     return t.getHours()+(t.getMinutes()/60)+(t.getSeconds()/3600);
+
   }
   
   // get time delta between two decimal time values, in ms
   function getTimeDelta(t1,t2) {
     let delta = (t2-t1)*3600*1000;
     return 0|delta;
-  }
-  
-  // snooze the current alarm
-  function snooze(mins) {
-    let now = new Date();
-    let nowTime = getDecimalTime(now);
-    let snoozeEnd = nowTime + mins/60; // mins minutes from now
-    let timeUntil = getTimeDelta(nowTime,snoozeEnd);
-    alarmTimerId = setTimeout(doAlarm,timeUntil);
   }
   
   // set timer for the next alarm, if one is available
@@ -66,53 +60,13 @@
     setNextAlarm();
     updateTimerId = setTimeout(updateAlarms,ALARMS_UPDATE_TIME*60*1000);
   }
-  
+
   function doAlarm() {
-    let alarm = nextAlarm;
-    
-    alarmTimerId = null;
-    
-    let buzzCount = 10;
-    
-    if (updateTimerId != null) {
-      // stop updates while we're alarming
-      clearTimeout(updateTimerId);
-      updateTimerId = null;
-    }
-    
-    let msg = "Alarm";
-    
-    E.showPrompt(msg,{
-      title:"ALARM!",
-      buttons: {"Sleep":true,"Ok":false}
-    }).then(function(sleep) {
-      buzzCount = 0;
-      if (sleep) {
-	snooze(10);
-      } else {
-	// todo: handle non-repeating alarms
-	updateAlarms();
-      }
-    });
-    
-    function buzz() {
-      Bangle.buzz(100).then(()=>{
-	setTimeout(()=>{
-	  Bangle.buzz(100).then(function() {
-	    if (buzzCount--)
-	      setTimeout(buzz, 3000);
-	    else if(alarm.as) { // auto-snooze
-	      buzzCount = 10;
-	      setTimeout(buzz, 600000);
-	    }
-	  });
-	},100);
-      });
-    }
-    buzz();
-    
+    s.write(ACTIVE_ALARM_FILE,JSON.stringify(nextAlarm));
+    load("mralarm-alert.js");
   }
   
+
   updateAlarms();
   
   // add the widget

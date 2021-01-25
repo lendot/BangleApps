@@ -2601,9 +2601,10 @@
   "tags": "widget",
   "readme": "README.md",
   "storage": [
-      {"name":"mralarm.wid.js","url":"widget.js"},
-      {"name":"mralarm.app.js","url":"app.js"},
-      {"name":"mralarm.img","url":"app-icon.js","evaluate":true}
+    {"name":"mralarm.wid.js","url":"widget.js"},
+    {"name":"mralarm.app.js","url":"app.js"},
+    {"name":"mralarm-alert.js","url":"alert.js"},
+    {"name":"mralarm.img","url":"app-icon.js","evaluate":true}
   ]
 }
 ]

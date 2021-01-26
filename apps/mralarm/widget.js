@@ -5,12 +5,18 @@
   const ACTIVE_ALARM_FILE = "mralarm.active.json";
 
   const ALARMS_UPDATE_TIME = 5; // time between alarms file updates (in mins)
+
+  const WIDTH = 24; // widget width
+  const HEIGHT = 23; // global widget height
+
+  const COUNTDOWN_START = 10; // mins out from alarm to show countdown in widget
   
   let alarms;
-  let nextAlarm;
+  let nextAlarm = null;
   
   let alarmTimerId = null;
   let updateTimerId = null;
+  let countdownTimerId = null;
   
   function loadAlarms() {
     alarms = s.readJSON(ALARMS_FILE,1) || [];
@@ -28,6 +34,17 @@
     let delta = (t2-t1)*3600*1000;
     return 0|delta;
   }
+
+  // convert minutes to milliseconds
+  function minsToMillis(ms) {
+    return ms*60*1000;
+  }
+
+  // update alarm countdown display in the widget
+  function countdown() {
+    draw();
+    countdownTimerId = setTimeout(countdown,10000);
+  }
   
   // set timer for the next alarm, if one is available
   function setNextAlarm() {
@@ -40,12 +57,18 @@
     let alarmsLeftToday = alarms.filter(a=>a.on && a.days[dow] === true &&
 					nowTime <= a.hr);
     if (alarmsLeftToday.length == 0) {
+      nextAlarm = null;
       return;
     }
     alarmsLeftToday = alarmsLeftToday.sort((a,b)=>a.hr-b.hr);
     nextAlarm = alarmsLeftToday[0];
     let timeUntil = getTimeDelta(nowTime,nextAlarm.hr);
     alarmTimerId = setTimeout(doAlarm,timeUntil);
+
+    let timeUntilCountdown = Math.max(timeUntil - minsToMillis(COUNTDOWN_START),0);
+    // set a timer for COUNTDOWN_START minutes before alarm, or immediately
+    // if it's less than COUNTDOWN_START minutes from now
+    countdownTimerId = setTimeout(countdown,timeUntilCountdown);
   }
   
   // update alarms from the alarms file
@@ -56,6 +79,10 @@
       alarmTimerId = null;
       nextAlarm = null;
     }
+    if (countdownTimerId != null) {
+      clearTimeout(countdownTimerId);
+      countdownTimerId = null;
+    }
     loadAlarms();
     setNextAlarm();
     updateTimerId = setTimeout(updateAlarms,ALARMS_UPDATE_TIME*60*1000);
@@ -63,17 +90,40 @@
 
   function doAlarm() {
     s.write(ACTIVE_ALARM_FILE,JSON.stringify(nextAlarm));
+    if (countdownTimerId != null) {
+      clearTimeout(countdownTimerId);
+      countdownTimerId = null;
+    }
     load("mralarm-alert.js");
   }
-  
 
-  updateAlarms();
-  
-  // add the widget
-  WIDGETS["mralarm"]={area:"tl",width:24,draw:function() {
-    g.setColor(-1);
+  function draw() {
+    g.reset();
+    g.clearRect(this.x, this.y, this.x+WIDTH, this.y+HEIGHT);
+    g.setColor(-1); // white
     g.drawImage(atob("GBgBAAAAAAAAABgADhhwDDwwGP8YGf+YMf+MM//MM//MA//AA//AA//AA//AA//AA//AB//gD//wD//wAAAAADwAABgAAAAAAAAA"),this.x,this.y);
-  }};
+    if (nextAlarm == null) {
+      // nothing else to display
+      return;
+    }
+    let now = new Date();
+    let nowTime = getDecimalTime(now);
+    let timeToAlarm = getTimeDelta(nowTime,nextAlarm.hr);
+    if (timeToAlarm <= 0) {
+      // we're past the alarm time
+      return;
+    }
+    timeToAlarm = Math.ceil(timeToAlarm / (1000 * 60)); // ms -> mins
+    if (timeToAlarm <= COUNTDOWN_START) {
+      g.setColor(0x07E0); // green
+      g.setFont("6x8",1);
+      g.drawString(timeToAlarm,this.x+5,this.y);
+    }
+  }
+    
+  // add the widget graphics
+  WIDGETS["mralarm"]={area:"tl",width:WIDTH,draw:draw};
   
+  updateAlarms();
   
 })()

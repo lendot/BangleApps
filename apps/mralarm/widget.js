@@ -122,7 +122,8 @@
       g.setFont("6x8",1);
       let strWidth = g.stringWidth(timeToAlarm);
       console.log("strWidth = "+strWidth);
-      console.log("x = "+this.x + (WIDTH-strWidth)/2);
+      console.log("this.x = "+this.x);
+      console.log("x = "+(this.x + (WIDTH-strWidth)/2));
       g.drawString(timeToAlarm,this.x+(WIDTH-strWidth)/2,this.y+8);
     }
   }

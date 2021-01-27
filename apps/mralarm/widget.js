@@ -42,6 +42,7 @@
 
   // update alarm countdown display in the widget
   function countdown() {
+    console.log("countdown callback");
     draw();
     countdownTimerId = setTimeout(countdown,10000);
   }
@@ -68,6 +69,7 @@
     let timeUntilCountdown = Math.max(timeUntil - minsToMillis(COUNTDOWN_START),0);
     // set a timer for COUNTDOWN_START minutes before alarm, or immediately
     // if it's less than COUNTDOWN_START minutes from now
+    console.log("timeUntilCountdown: "+timeUntilCountdown);
     countdownTimerId = setTimeout(countdown,timeUntilCountdown);
   }
   
@@ -98,6 +100,7 @@
   }
 
   function draw() {
+    console.log("draw");
     g.reset();
     g.clearRect(this.x, this.y, this.x+WIDTH, this.y+HEIGHT);
     g.setColor(-1); // white
@@ -117,7 +120,7 @@
     if (timeToAlarm <= COUNTDOWN_START) {
       g.setColor(0x07E0); // green
       g.setFont("6x8",1);
-      g.drawString(timeToAlarm,this.x+5,this.y);
+      g.drawString(timeToAlarm,this.x+7,this.y+5);
     }
   }
     

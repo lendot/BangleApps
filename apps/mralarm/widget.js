@@ -116,7 +116,9 @@
       // we're past the alarm time
       return;
     }
+    console.log("pre timeToAlarm = "+timeToAlarm);
     timeToAlarm = Math.ceil(timeToAlarm / (1000 * 60)); // ms -> mins
+    console.log("timeToAlarm = "+timeToAlarm);
     if (timeToAlarm <= COUNTDOWN_START) {
       g.setColor(0x000000); 
       g.setFont("6x8",1);

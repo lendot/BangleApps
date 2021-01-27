@@ -43,7 +43,9 @@
   // update alarm countdown display in the widget
   function countdown() {
     console.log("countdown callback");
-    draw();
+    if (Bangle.isLCDOn()) {
+      WIDGETS["mralarm"].draw();
+    }
     countdownTimerId = setTimeout(countdown,10000);
   }
   

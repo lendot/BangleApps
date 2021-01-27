@@ -15,7 +15,7 @@
   let nextAlarm = null;
   
   let alarmTimerId = null;
-  let updateTimerId = null;
+//  let updateTimerId = null;
   let countdownTimerId = null;
   
   function loadAlarms() {
@@ -77,6 +77,7 @@
   
   // update alarms from the alarms file
   function updateAlarms() {
+    console.log("updateAlarms()");
     if (alarmTimerId != null) {
       // stop the queued alarm before updating
       clearTimeout(alarmTimerId);
@@ -89,7 +90,7 @@
     }
     loadAlarms();
     setNextAlarm();
-    updateTimerId = setTimeout(updateAlarms,ALARMS_UPDATE_TIME*60*1000);
+//    updateTimerId = setTimeout(updateAlarms,ALARMS_UPDATE_TIME*60*1000);
   }
 
   function doAlarm() {
@@ -101,6 +102,7 @@
     load("mralarm-alert.js");
   }
 
+  // (re)draw the widget
   function draw() {
     console.log("draw");
     g.reset();
@@ -131,9 +133,43 @@
       g.drawString(timeToAlarm,this.x+(WIDTH-strWidth)/2,this.y+8);
     }
   }
+
+  // called by app when mralarm.json has changed
+  function reload() {
+    console.log("reload()");
+    
+    // clear out pending timers
+    if (alarmTimerId != null) {
+      clearTimeout(alarmTimerId);
+      alarmTimerId = null;
+      nextAlarm = null;
+    }
+    if (countdownTimerId != null) {
+      clearTimeout(countdownTimerId);
+      countdownTimerId = null;
+    }
+
+    // just to be safe, let's queue up the update stuff
+    // to run after this script is done instead of immediately
+    setTimeout(updateAlarms,0);
+  }
+
+  // called by alarm alert when done
+  function done() {
+    
+  }
+  
+  // redraw when the LCD turns on
+  Bangle.on('lcdPower', function(on) {
+    if (on) WIDGETS["mralarm"].draw();
+  });
     
   // add the widget graphics
-  WIDGETS["mralarm"]={area:"tl",width:WIDTH,draw:draw};
+  WIDGETS["mralarm"]={area:"tl",
+		      width:WIDTH,
+		      draw:draw,
+		      reload:reload,
+		      done:done};
   
   updateAlarms();
   

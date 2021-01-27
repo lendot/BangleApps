@@ -2,15 +2,7 @@ Bangle.loadWidgets();
 Bangle.drawWidgets();
 
 var alarms = require("Storage").readJSON("mralarm.json",1)||[];
-/*alarms = [
-  { on : true,
-    hr : 6.5, // hours + minutes/60
-    msg : "Eat chocolate",
-    last : 0, // last day of the month we alarmed on - so we don't alarm twice in one day!
-    rp : true, // repeat
-    as : false, // auto snooze
-  }
-];*/
+
 
 function formatTime(t) {
   var hrs = 0|t; // get integer portion of t, i.e., the hour
@@ -135,12 +127,20 @@ function editAlarm(alarmIndex) {
     if (newAlarm) alarms.push(getAlarm());
     else alarms[alarmIndex] = getAlarm();
     require("Storage").write("mralarm.json",JSON.stringify(alarms));
+
+    // tell widget the alarm file has changed
+    WIDGETS["mralarm"].reload();
+    
     showMainMenu();
   };
   if (!newAlarm) {
     menu["> Delete"] = function() {
       alarms.splice(alarmIndex,1);
       require("Storage").write("mralarm.json",JSON.stringify(alarms));
+
+      // tell widget the alarm file has changed
+      WIDGETS["mralarm"].reload();
+      
       showMainMenu();
     };
   }

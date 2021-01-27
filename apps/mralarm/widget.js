@@ -2,7 +2,6 @@
   const s = require('Storage');
   
   const ALARMS_FILE = "mralarm.json";
-  const ACTIVE_ALARM_FILE = "mralarm.active.json";
 
   const ALARMS_UPDATE_TIME = 5; // time between alarms file updates (in mins)
 
@@ -42,7 +41,6 @@
 
   // update alarm countdown display in the widget
   function countdown() {
-    console.log("countdown callback");
     if (Bangle.isLCDOn()) {
       WIDGETS["mralarm"].draw();
     }
@@ -71,13 +69,11 @@
     let timeUntilCountdown = Math.max(timeUntil - minsToMillis(COUNTDOWN_START),0);
     // set a timer for COUNTDOWN_START minutes before alarm, or immediately
     // if it's less than COUNTDOWN_START minutes from now
-    console.log("timeUntilCountdown: "+timeUntilCountdown);
     countdownTimerId = setTimeout(countdown,timeUntilCountdown);
   }
   
   // update alarms from the alarms file
   function updateAlarms() {
-    console.log("updateAlarms()");
     if (alarmTimerId != null) {
       // stop the queued alarm before updating
       clearTimeout(alarmTimerId);
@@ -93,8 +89,8 @@
 //    updateTimerId = setTimeout(updateAlarms,ALARMS_UPDATE_TIME*60*1000);
   }
 
+  // fire off the alarm to the user
   function doAlarm() {
-    s.write(ACTIVE_ALARM_FILE,JSON.stringify(nextAlarm));
     if (countdownTimerId != null) {
       clearTimeout(countdownTimerId);
       countdownTimerId = null;
@@ -104,7 +100,6 @@
 
   // (re)draw the widget
   function draw() {
-    console.log("draw");
     g.reset();
     g.clearRect(this.x, this.y, this.x+WIDTH, this.y+HEIGHT);
     g.setColor(-1); // white
@@ -120,24 +115,17 @@
       // we're past the alarm time
       return;
     }
-    console.log("pre timeToAlarm = "+timeToAlarm);
     timeToAlarm = Math.ceil(timeToAlarm / (1000 * 60)); // ms -> mins
-    console.log("timeToAlarm = "+timeToAlarm);
     if (timeToAlarm <= COUNTDOWN_START) {
       g.setColor(0x000000); 
       g.setFont("6x8",1);
       let strWidth = g.stringWidth(timeToAlarm);
-      console.log("strWidth = "+strWidth);
-      console.log("this.x = "+this.x);
-      console.log("x = "+(this.x + (WIDTH-strWidth)/2));
       g.drawString(timeToAlarm,this.x+(WIDTH-strWidth)/2,this.y+8);
     }
   }
 
   // called by app when mralarm.json has changed
   function reload() {
-    console.log("reload()");
-    
     // clear out pending timers
     if (alarmTimerId != null) {
       clearTimeout(alarmTimerId);
@@ -154,6 +142,11 @@
     setTimeout(updateAlarms,0);
   }
 
+  // get the active alarm
+  function getAlarm() {
+    return nextAlarm;
+  }
+  
   // called by alarm alert when done
   function done() {
     
@@ -169,7 +162,8 @@
 		      width:WIDTH,
 		      draw:draw,
 		      reload:reload,
-		      done:done};
+		      done:done,
+		      getAlarm:getAlarm};
   
   updateAlarms();
   

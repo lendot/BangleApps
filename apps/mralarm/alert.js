@@ -1,12 +1,8 @@
-const s = require('Storage');
-
-const ACTIVE_ALARM_FILE = "mralarm.active.json";
-
 let alarmTimerId = null;
 
 // get the currently active alarm
-function loadActiveAlarm() {
-  return s.readJSON(ACTIVE_ALARM_FILE,1);
+function getActiveAlarm() {
+  return WIDGETS["mralarm"].getAlarm();
 }
 
 // get a decimal representation of current time
@@ -53,7 +49,7 @@ function doAlarm(alarm) {
   buzz();
 }
 
-alarm = loadActiveAlarm();
+alarm = getActiveAlarm();
 if (alarm==null) {
   // no active alarm, nothing to do
   load();

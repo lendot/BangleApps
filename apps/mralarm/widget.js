@@ -118,9 +118,11 @@
     }
     timeToAlarm = Math.ceil(timeToAlarm / (1000 * 60)); // ms -> mins
     if (timeToAlarm <= COUNTDOWN_START) {
-      g.setColor(0x0000); // black
+      g.setColor(0x000000); 
       g.setFont("6x8",1);
       let strWidth = g.stringWidth(timeToAlarm);
+      console.log("strWidth = "+strWidth);
+      console.log("x = "+this.x + (WIDTH-strWidth)/2);
       g.drawString(timeToAlarm,this.x+(WIDTH-strWidth)/2,this.y+8);
     }
   }

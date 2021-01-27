@@ -121,7 +121,7 @@
       g.setColor(0x0000); // black
       g.setFont("6x8",1);
       let strWidth = g.stringWidth(timeToAlarm);
-      g.drawString(timeToAlarm,(WIDTH-strWidth)/2,this.y+8);
+      g.drawString(timeToAlarm,this.x+(WIDTH-strWidth)/2,this.y+8);
     }
   }
     

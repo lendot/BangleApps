@@ -16,6 +16,12 @@ function getDecimalTime(t) {
   return t.getHours()+(t.getMinutes()/60)+(t.getSeconds()/3600);
 }
 
+function formatTime(t) {
+  let hrs = 0|t;
+  let mins = Math.round((t-hrs)*60);
+  return hrs+":"+("0"+mins).substr(-2);
+}
+
 // snooze the alarm for the specified number of minutes
 function snooze(mins) {
   let timeUntil = mins * 60 * 1000;
@@ -24,8 +30,11 @@ function snooze(mins) {
 
 function doAlarm(alarm) {
   let buzzCount = 10;
-  let msg = "Alarm";
-
+  let msg = formatTime(alarm.hr);
+  if (alarm.msg) {
+    msg += "\n"+alarm.msg;
+  }
+  
   E.showPrompt(msg,{
     title:"ALARM!",
     buttons: {"Sleep":true,"Ok":false}

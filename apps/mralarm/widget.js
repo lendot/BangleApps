@@ -2,7 +2,8 @@
   const s = require('Storage');
   
   const ALARMS_FILE = "mralarm.json";
-
+  const ACTIVE_ALARM_FILE = "mralarm.active.json";
+  
   const ALARMS_UPDATE_TIME = 5; // time between alarms file updates (in mins)
 
   const WIDTH = 24; // widget width
@@ -91,6 +92,7 @@
 
   // fire off the alarm to the user
   function doAlarm() {
+    s.write(ACTIVE_ALARM_FILE,JSON.stringify(nextAlarm));
     if (countdownTimerId != null) {
       clearTimeout(countdownTimerId);
       countdownTimerId = null;
@@ -142,11 +144,6 @@
     setTimeout(updateAlarms,0);
   }
 
-  // get the active alarm
-  function getAlarm() {
-    return nextAlarm;
-  }
-  
   // called by alarm alert when done
   function done() {
     
@@ -162,8 +159,7 @@
 		      width:WIDTH,
 		      draw:draw,
 		      reload:reload,
-		      done:done,
-		      getAlarm:getAlarm};
+		      done:done};
   
   updateAlarms();
   

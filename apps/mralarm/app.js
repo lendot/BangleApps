@@ -8,7 +8,7 @@ let alarmNames = ['','Wake up','Bedtime','Glucose'];
 function formatTime(t) {
   var hrs = 0|t; // get integer portion of t, i.e., the hour
   var mins = Math.round((t-hrs)*60);
-  return hrs+":"+("0"+mins).substr(-2);
+  return hrs.padStart(2,"0")+":"+mins.padStart(2,"0");
 }
 
 function getCurrentHr() {
@@ -23,7 +23,10 @@ function showMainMenu() {
   };
   alarms.forEach((alarm,idx)=>{
     txt = (alarm.on?"on  ":"off ")+formatTime(alarm.hr);
-    if (alarm.rp) txt += " (repeat)";
+    //    if (alarm.rp) txt += " (repeat)";
+    if (alarm.name) {
+      txt += alarm.name;
+    }
     menu[txt] = function() {
       editAlarm(idx);
     };

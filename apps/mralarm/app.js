@@ -2,13 +2,14 @@ Bangle.loadWidgets();
 Bangle.drawWidgets();
 
 var alarms = require("Storage").readJSON("mralarm.json",1)||[];
+alarms = alarms.sort((a,b)=>a.hr-b.hr);
 
 let alarmNames = ['','Wake up','Bedtime','Glucose'];
 
 function formatTime(t) {
   var hrs = 0|t; // get integer portion of t, i.e., the hour
   var mins = Math.round((t-hrs)*60);
-  return hrs.padStart(2,"0")+":"+mins.padStart(2,"0");
+  return hrs.padStart(2," ")+":"+mins.padStart(2,"0");
 }
 
 function getCurrentHr() {

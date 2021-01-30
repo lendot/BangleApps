@@ -3,7 +3,7 @@ Bangle.drawWidgets();
 
 var alarms = require("Storage").readJSON("mralarm.json",1)||[];
 
-let alarmNames = ['Wake up','Bedtime','Glucose'];
+let alarmNames = ['','Wake up','Bedtime','Glucose'];
 
 function formatTime(t) {
   var hrs = 0|t; // get integer portion of t, i.e., the hour

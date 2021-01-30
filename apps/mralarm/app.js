@@ -26,7 +26,7 @@ function showMainMenu() {
     txt = (alarm.on?"on  ":"off ")+formatTime(alarm.hr);
     //    if (alarm.rp) txt += " (repeat)";
     if (alarm.name) {
-      txt += alarm.name;
+      txt += " "+alarm.name;
     }
     menu[txt] = function() {
       editAlarm(idx);

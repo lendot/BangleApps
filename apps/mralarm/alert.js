@@ -31,8 +31,8 @@ function snooze(mins) {
 function doAlarm(alarm) {
   let buzzCount = 10;
   let msg = formatTime(alarm.hr);
-  if (alarm.msg) {
-    msg += "\n"+alarm.msg;
+  if (alarm.name && alarm.name!=="") {
+    msg += "\n"+alarm.name;
   }
   
   E.showPrompt(msg,{

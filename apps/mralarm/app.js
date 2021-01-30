@@ -3,6 +3,7 @@ Bangle.drawWidgets();
 
 var alarms = require("Storage").readJSON("mralarm.json",1)||[];
 
+let alarmNames = ['Wake up','Bedtime','Glucose'];
 
 function formatTime(t) {
   var hrs = 0|t; // get integer portion of t, i.e., the hour
@@ -38,7 +39,10 @@ function editAlarm(alarmIndex) {
   var en = true;
   var repeat = true;
   var as = false;
+  var name = "";
   var days = [true,true,true,true,true,true,true]; // 0-6 sun-sat
+
+  let nameIndex = 0;
   
   if (!newAlarm) {
     var a = alarms[alarmIndex];
@@ -48,9 +52,22 @@ function editAlarm(alarmIndex) {
     repeat = a.rp;
     as = a.as;
     days = a.days;
+    name = a.name;
+    nameIndex = alarmNames.indexOf(name);
+    if (nameIndex == -1) {
+      nameIndex = 0;
+    }
   }
   const menu = {
     '': { 'title': 'Alarms' },
+    'Name': {
+      value: nameIndex,
+      format: v=>alarmNames[v],
+      min: 0,
+      max: alarmNames.length-1,
+      step:1,
+      onchange: v=>name=alarmNames[v]
+    },
     'Hours': {
       value: hrs,
       onchange: function(v){if (v<0)v=23;if (v>23)v=0;hrs=v;this.value=v;} // no arrow fn -> preserve 'this'
@@ -118,6 +135,7 @@ function editAlarm(alarmIndex) {
       day = (new Date()).getDate();
     // Save alarm
     return {
+      name: name,
       on : en, hr : hr,
       last : day, rp : repeat, as: as,
       days: days

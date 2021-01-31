@@ -1,10 +1,10 @@
 Bangle.loadWidgets();
 Bangle.drawWidgets();
 
-var alarms = require("Storage").readJSON("mralarm.json",1)||[];
-alarms = alarms.sort((a,b)=>a.hr-b.hr);
+const s = require("Storage");
 
-let alarmNames = ['','Wake up','Bedtime','Glucose'];
+var alarms = s.readJSON("mralarm.json",1)||[];
+alarms = alarms.sort((a,b)=>a.hr-b.hr);
 
 function formatTime(t) {
   var hrs = (0|t).toString(); // get integer portion of t, i.e., the hour
@@ -23,7 +23,7 @@ function showMainMenu() {
     'New Alarm': ()=>editAlarm(-1)
   };
   alarms.forEach((alarm,idx)=>{
-    txt = (alarm.on?"on  ":"off ")+formatTime(alarm.hr);
+    let txt = (alarm.on?"on  ":"off ")+formatTime(alarm.hr);
     //    if (alarm.rp) txt += " (repeat)";
     if (alarm.name) {
       txt += " "+alarm.name;
@@ -46,7 +46,12 @@ function editAlarm(alarmIndex) {
   var name = "";
   var days = [true,true,true,true,true,true,true]; // 0-6 sun-sat
 
+  let alarmNames = ['','Wake up','Bedtime','Glucose'];
   let nameIndex = 0;
+
+  let daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+  let onoff = ['Off','On'];
   
   if (!newAlarm) {
     var a = alarms[alarmIndex];
@@ -89,66 +94,45 @@ function editAlarm(alarmIndex) {
       value: en,
       format: v=>v?"Yes":"No",
       onchange: v=>repeat=v
-    },
-    'Sunday': {
-      value: days[0],
-      format: v=>v?"On":"Off",
-      onchange: v=>days[0]=v
-    },
-    'Monday': {
-      value: days[1],
-      format: v=>v?"On":"Off",
-      onchange: v=>days[1]=v
-    },
-    'Tueday': {
-      value: days[2],
-      format: v=>v?"On":"Off",
-      onchange: v=>days[2]=v
-    },
-    'Wednesday': {
-      value: days[3],
-      format: v=>v?"On":"Off",
-      onchange: v=>days[3]=v
-    },
-    'Thursday': {
-      value: days[4],
-      format: v=>v?"On":"Off",
-      onchange: v=>days[4]=v
-    },
-    'Friday': {
-      value: days[5],
-      format: v=>v?"On":"Off",
-      onchange: v=>days[5]=v
-    },
-    'Saturday': {
-      value: days[6],
-      format: v=>v?"On":"Off",
-      onchange: v=>days[6]=v
-    },
-    'Auto snooze': {
-      value: as,
-      format: v=>v?"Yes":"No",
-      onchange: v=>as=v
     }
   };
+
+  /*
+  // add toggles for each day of the week
+  function addDay(day,i,weekDays) {
+    menu[day] = {
+      value: days[i],
+      format: v=>onoff[v],
+      onchange: v=>days[i]=v
+    };
+  }
+  daysOfWeek.forEach(addDay);
+  */
+    
+  menu['Auto snooze']={
+    value: as,
+    format: v=>v?"Yes":"No",
+    onchange: v=>as=v
+  };
+  
   function getAlarm() {
     var hr = hrs+(mins/60);
-    var day = 0;
-    // If alarm is for tomorrow not today (eg, in the past), set day
-    if (hr < getCurrentHr())
-      day = (new Date()).getDate();
+
     // Save alarm
     return {
       name: name,
       on : en, hr : hr,
-      last : day, rp : repeat, as: as,
+      rp : repeat, as: as,
       days: days
     };
   }
   menu["> Save"] = function() {
-    if (newAlarm) alarms.push(getAlarm());
-    else alarms[alarmIndex] = getAlarm();
-    require("Storage").write("mralarm.json",JSON.stringify(alarms));
+    if (newAlarm) {
+      alarms.push(getAlarm());
+    } else {
+      alarms[alarmIndex] = getAlarm();
+    }
+    s.write("mralarm.json",JSON.stringify(alarms));
 
     // tell widget the alarm file has changed
     WIDGETS["mralarm"].reload();
@@ -158,7 +142,7 @@ function editAlarm(alarmIndex) {
   if (!newAlarm) {
     menu["> Delete"] = function() {
       alarms.splice(alarmIndex,1);
-      require("Storage").write("mralarm.json",JSON.stringify(alarms));
+      s.write("mralarm.json",JSON.stringify(alarms));
 
       // tell widget the alarm file has changed
       WIDGETS["mralarm"].reload();

@@ -97,7 +97,6 @@ function editAlarm(alarmIndex) {
     }
   };
 
-  /*
   // add toggles for each day of the week
   function addDay(day,i,weekDays) {
     menu[day] = {
@@ -107,7 +106,6 @@ function editAlarm(alarmIndex) {
     };
   }
   daysOfWeek.forEach(addDay);
-  */
     
   menu['Auto snooze']={
     value: as,

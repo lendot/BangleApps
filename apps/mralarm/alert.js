@@ -34,33 +34,37 @@ function doAlarm(alarm) {
   if (alarm.name && alarm.name!=="") {
     msg += "\n"+alarm.name;
   }
+
+  let timeoutId = null;
   
   E.showPrompt(msg,{
-    title:"ALARM!",
-    buttons: {"Sleep":true,"Ok":false}
-  }).then(function(sleep) {
-    buzzCount = 0;
-    if (sleep) {
-      snooze(10);
-    } else {
-      load();
-    }
+    title:"Alarm",
+    buttons: {"Ok":true}
+  }).then(function(ok) {
+    load();
   });
+
+  
+  
   function buzz() {
     Bangle.buzz(100).then(()=>{
       setTimeout(()=>{
 	Bangle.buzz(100).then(function() {
-	  if (buzzCount--)
-	    setTimeout(buzz, 3000);
-	  else if(alarm.as) { // auto-snooze
-	    buzzCount = 10;
-	    setTimeout(buzz, 600000);
-	  }
+	  setTimeout(buzz, 2000);
 	});
       },100);
     });
   }
   buzz();
+
+
+  // called when alarm has gone unattended too long
+  function timeoutAlarm() {
+    E.showPrompt();
+    load();
+  }
+  
+  timeoutId=setTimeout(timeoutAlarm,3*60000); // timeout alarm after 3 minutes
 }
 
 alarm = getActiveAlarm();

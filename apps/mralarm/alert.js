@@ -36,23 +36,26 @@ function doAlarm(alarm) {
   }
 
   let timeoutId = null;
+
+  Bangle.setLCDPower(true);
   
   E.showPrompt(msg,{
     title:"Alarm",
     buttons: {"Ok":true}
   }).then(function(ok) {
+    Bangle.setLCDPower(false);
     load();
   });
 
   
   
   function buzz() {
-    Bangle.buzz(100).then(()=>{
+    Bangle.buzz(150).then(()=>{
       setTimeout(()=>{
 	Bangle.buzz(100).then(function() {
-	  setTimeout(buzz, 2000);
+	  setTimeout(buzz, 1500);
 	});
-      },100);
+      },150);
     });
   }
   buzz();
@@ -61,10 +64,11 @@ function doAlarm(alarm) {
   // called when alarm has gone unattended too long
   function timeoutAlarm() {
     E.showPrompt();
+    Bangle.setLCDPower(false);
     load();
   }
   
-  timeoutId=setTimeout(timeoutAlarm,3*60000); // timeout alarm after 3 minutes
+  timeoutId=setTimeout(timeoutAlarm,2*60000); // timeout alarm after 2 minutes
 }
 
 alarm = getActiveAlarm();

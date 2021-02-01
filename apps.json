@@ -2593,7 +2593,7 @@
   ]
 },
 { "id": "mralarm",
-  "name": "Alarm widget that can specify day(s) to alarm",
+  "name": "MrAlarm",
   "shortName":"MrAlarm",
   "icon": "app.png",
   "version":"0.01",

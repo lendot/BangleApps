@@ -63,6 +63,16 @@
 
   // fire off the alarm to the user
   function doAlarm() {
+
+    /* --- todo: put this code somewhere less janky */
+    if (!nextAlarm.rp) {
+      // alarm doesn't repeat; disable it for the future
+      nextAlarm.en = false;
+      s.write(ALARMS_FILE,JSON.stringify(alarms));
+    }
+    /* --- */
+
+    
     s.write(ACTIVE_ALARM_FILE,JSON.stringify(nextAlarm));
     load("mralarm-alert.js");
   }
@@ -89,11 +99,6 @@
     setTimeout(updateAlarms,0);
   }
 
-  // called by alarm alert when done
-  function done() {
-    
-  }
-  
   // redraw when the LCD turns on
   Bangle.on('lcdPower', function(on) {
     if (on) WIDGETS["mralarm"].draw();
@@ -103,8 +108,7 @@
   WIDGETS["mralarm"]={area:"tl",
 		      width:WIDTH,
 		      draw:draw,
-		      reload:reload,
-		      done:done};
+		      reload:reload};
   
   updateAlarms();
   

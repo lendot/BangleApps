@@ -37,13 +37,10 @@ function doAlarm(alarm) {
 
   let timeoutId = null;
 
-  Bangle.setLCDPower(true);
-  
   E.showPrompt(msg,{
     title:"Alarm",
     buttons: {"Ok":true}
   }).then(function(ok) {
-    Bangle.setLCDPower(false);
     load();
   });
 
@@ -64,7 +61,6 @@ function doAlarm(alarm) {
   // called when alarm has gone unattended too long
   function timeoutAlarm() {
     E.showPrompt();
-    Bangle.setLCDPower(false);
     load();
   }
   

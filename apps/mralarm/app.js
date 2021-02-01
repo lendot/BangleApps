@@ -23,7 +23,7 @@ function showMainMenu() {
     'New Alarm': ()=>editAlarm(-1)
   };
   alarms.forEach((alarm,idx)=>{
-    let txt = (alarm.on?"on  ":"off ")+formatTime(alarm.hr);
+    let txt = formatTime(alarm.hr);
     //    if (alarm.rp) txt += " (repeat)";
     if (alarm.name) {
       txt += " "+alarm.name;

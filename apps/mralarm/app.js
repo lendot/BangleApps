@@ -55,6 +55,7 @@ function editAlarm(alarmIndex) {
   
   if (!newAlarm) {
     let a = alarms[alarmIndex];
+    console.log(a);
     hrs = 0|a.hr;
     mins = Math.round((a.hr-hrs)*60);
     en = a.on;
@@ -67,6 +68,7 @@ function editAlarm(alarmIndex) {
       nameIndex = 0;
     }
   }
+
   const menu = {
     '': { 'title': 'Alarms' },
     'Name': {

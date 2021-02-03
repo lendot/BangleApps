@@ -33,12 +33,12 @@ function showMainMenu() {
       txt += " "+alarm.name;
     }
     menu[txt] = function() {
+      E.showMenu(); // remove the current menu
       editAlarm(idx);
     };
   });
   menu['< Back'] =  ()=>{load();};
 
-  E.showMenu(); // clear out any existing menus
   
   return E.showMenu(menu);
 }
@@ -73,8 +73,6 @@ function editAlarm(alarmIndex) {
       nameIndex = 0;
     }
   }
-
-  E.showMenu(); // clear out any existing menus
 
   
   const menu = {
@@ -144,6 +142,7 @@ function editAlarm(alarmIndex) {
 
     // tell widget the alarm file has changed
     WIDGETS["mralarm"].reload();
+    E.showMenu(); // remove this menu
 
     showMainMenu();
   };
@@ -154,6 +153,7 @@ function editAlarm(alarmIndex) {
 
       // tell widget the alarm file has changed
       WIDGETS["mralarm"].reload();
+      E.showMenu(); // remove this menu
       
       showMainMenu();
     };

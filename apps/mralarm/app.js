@@ -21,6 +21,19 @@ function onOff(v) {
   return v?"On":"Off";
 }
 
+function alarmDaysAbbrev(days) {
+  let dayAbbrev = ['S','M','T','W','T','F','S'];
+  let abbrev = "";
+  dayAbbrev.forEach(i => {
+    if (days[i]) {
+      abbrev += dayAbbrev[i];
+    } else {
+      abbrev += " ";
+    }
+  });
+  return abbrev;
+}
+
 function showMainMenu() {
   const menu = {
     '': { 'title': 'Alarms' },
@@ -32,6 +45,7 @@ function showMainMenu() {
     if (alarm.name) {
       txt += " "+alarm.name;
     }
+    txt += "\n      "+alarmDaysAbbrev(alarm.days);
     menu[txt] = function() {
       E.showMenu(); // remove the current menu
       editAlarm(idx);

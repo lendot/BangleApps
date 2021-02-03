@@ -2599,6 +2599,7 @@
   "version":"0.01",
   "description": "A detailed description of my great widget",
   "tags": "widget",
+  "allow_emulator":true,
   "readme": "README.md",
   "storage": [
     {"name":"mralarm.wid.js","url":"widget.js"},

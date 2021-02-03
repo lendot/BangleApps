@@ -3,17 +3,17 @@ Bangle.drawWidgets();
 
 const s = require("Storage");
 
-var alarms = s.readJSON("mralarm.json",1)||[];
+let alarms = s.readJSON("mralarm.json",1)||[];
 alarms = alarms.sort((a,b)=>a.hr-b.hr);
 
 function formatTime(t) {
-  var hrs = (0|t).toString(); // get integer portion of t, i.e., the hour
-  var mins = Math.round((t-hrs)*60).toString();
+  let hrs = (0|t).toString(); // get integer portion of t, i.e., the hour
+  let mins = Math.round((t-hrs)*60).toString();
   return hrs.padStart(2," ")+":"+mins.padStart(2,"0");
 }
 
 function getCurrentHr() {
-  var time = new Date();
+  let time = new Date();
   return time.getHours()+(time.getMinutes()/60)+(time.getSeconds()/3600);
 }
 
@@ -37,14 +37,14 @@ function showMainMenu() {
 }
 
 function editAlarm(alarmIndex) {
-  var newAlarm = alarmIndex<0;
-  var hrs = 12;
-  var mins = 0;
-  var en = true;
-  var repeat = true;
-  var as = false;
-  var name = "";
-  var days = [true,true,true,true,true,true,true]; // 0-6 sun-sat
+  let newAlarm = alarmIndex<0;
+  let hrs = 12;
+  let mins = 0;
+  let en = true;
+  let repeat = true;
+  let as = false;
+  let name = "";
+  let days = [true,true,true,true,true,true,true]; // 0-6 sun-sat
 
   let alarmNames = ['','Wake up','Bedtime','Glucose'];
   let nameIndex = 0;
@@ -54,7 +54,7 @@ function editAlarm(alarmIndex) {
   let onoff = ['Off','On'];
   
   if (!newAlarm) {
-    var a = alarms[alarmIndex];
+    let a = alarms[alarmIndex];
     hrs = 0|a.hr;
     mins = Math.round((a.hr-hrs)*60);
     en = a.on;
@@ -91,7 +91,7 @@ function editAlarm(alarmIndex) {
       onchange: v=>en=v
     },
     'Repeat': {
-      value: en,
+      value: repeat,
       format: v=>v?"Yes":"No",
       onchange: v=>repeat=v
     }
@@ -114,7 +114,7 @@ function editAlarm(alarmIndex) {
   };
   
   function getAlarm() {
-    var hr = hrs+(mins/60);
+    let hr = hrs+(mins/60);
 
     // Save alarm
     return {

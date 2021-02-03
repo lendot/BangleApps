@@ -67,7 +67,7 @@
     /* --- todo: put this code somewhere less janky */
     if (!nextAlarm.rp) {
       // alarm doesn't repeat; disable it for the future
-      nextAlarm.en = false;
+      nextAlarm.on = false;
       s.write(ALARMS_FILE,JSON.stringify(alarms));
     }
     /* --- */

@@ -37,6 +37,9 @@ function showMainMenu() {
     };
   });
   menu['< Back'] =  ()=>{load();};
+
+  E.showMenu(); // clear out any existing menus
+  
   return E.showMenu(menu);
 }
 
@@ -71,6 +74,9 @@ function editAlarm(alarmIndex) {
     }
   }
 
+  E.showMenu(); // clear out any existing menus
+
+  
   const menu = {
     '': { 'title': 'Alarms' },
     'Name': {
@@ -138,7 +144,7 @@ function editAlarm(alarmIndex) {
 
     // tell widget the alarm file has changed
     WIDGETS["mralarm"].reload();
-    
+
     showMainMenu();
   };
   if (!newAlarm) {

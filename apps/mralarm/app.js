@@ -158,7 +158,10 @@ function editAlarm(alarmIndex) {
       showMainMenu();
     };
   }
-  menu['< Back'] = showMainMenu;
+  menu['< Back'] = function() {
+    E.showMenu();
+    showMainMenu();
+  };
   return E.showMenu(menu);
 }
 

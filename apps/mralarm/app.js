@@ -17,6 +17,10 @@ function getCurrentHr() {
   return time.getHours()+(time.getMinutes()/60)+(time.getSeconds()/3600);
 }
 
+function onOff(v) {
+  return v?"On":"Off";
+}
+
 function showMainMenu() {
   const menu = {
     '': { 'title': 'Alarms' },
@@ -51,8 +55,6 @@ function editAlarm(alarmIndex) {
 
   let daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
-  let onoff = ['Off','On'];
-  
   if (!newAlarm) {
     let a = alarms[alarmIndex];
     console.log(a);
@@ -103,7 +105,7 @@ function editAlarm(alarmIndex) {
   function addDay(day,i,weekDays) {
     menu[day] = {
       value: days[i],
-      format: v=>onoff[v],
+      format: v=>onOff(v),
       onchange: v=>days[i]=v
     };
   }

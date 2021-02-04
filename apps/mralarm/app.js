@@ -51,7 +51,7 @@ function showMainMenu() {
       editAlarm(idx);
     };
   });
-  menu['< Back'] =  ()=>{load();};
+  menu['< Back'] =  ()=>{showMainScreen();};
 
   
   return E.showMenu(menu);
@@ -179,4 +179,19 @@ function editAlarm(alarmIndex) {
   return E.showMenu(menu);
 }
 
-showMainMenu();
+// show the screen that displays on app launch
+function showMainScreen() {
+  let msg="Next Alarm:\n8:00";
+  E.showPrompt(msg,{
+    title:"MrAlarm",
+    buttons: {"Alarms":1,"Exit":2}
+  }).then(function(button) {
+    if (button==1) {
+      showMainMenu();
+    } else {
+      load();
+    }
+  });
+}
+
+showMainScreen();

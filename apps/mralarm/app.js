@@ -45,7 +45,7 @@ function showMainMenu() {
     if (alarm.name) {
       txt += " "+alarm.name;
     }
-    txt += "\n      "+alarmDaysAbbrev(alarm.days);
+    txt += " "+alarmDaysAbbrev(alarm.days);
     menu[txt] = function() {
       E.showMenu(); // remove the current menu
       editAlarm(idx);

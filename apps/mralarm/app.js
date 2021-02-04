@@ -22,11 +22,11 @@ function onOff(v) {
 }
 
 function alarmDaysAbbrev(days) {
-  let dayAbbrev = ['S','M','T','W','T','F','S'];
+  let dayAbbrevs = ['S','M','T','W','T','F','S'];
   let abbrev = "";
-  dayAbbrev.forEach(i => {
+  dayAbbrevs.forEach((dayAbbrev,i) => {
     if (days[i]) {
-      abbrev += dayAbbrev[i];
+      abbrev += dayAbbrev;
     } else {
       abbrev += " ";
     }

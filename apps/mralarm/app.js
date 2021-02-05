@@ -196,10 +196,11 @@ function editAlarm(alarmIndex) {
   menu["> Save"] = function() {
     if (newAlarm) {
       alarms.push(getAlarm());
-      alarms.sort((a,b)=>a.hr-b.hr);
     } else {
       alarms[alarmIndex] = getAlarm();
     }
+    alarms.sort((a,b)=>a.hr-b.hr);
+
     s.write("mralarm.json",JSON.stringify(alarms));
 
     // tell widget the alarm file has changed

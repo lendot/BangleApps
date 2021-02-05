@@ -196,6 +196,7 @@ function editAlarm(alarmIndex) {
   menu["> Save"] = function() {
     if (newAlarm) {
       alarms.push(getAlarm());
+      alarms.sort((a,b)=>a.hr-b.hr);
     } else {
       alarms[alarmIndex] = getAlarm();
     }
@@ -240,7 +241,7 @@ function showMainScreen() {
   }
   E.showPrompt(msg,{
     title:"MrAlarm",
-    buttons: {"Alarms":1,"Quick Alarm":2,"Exit":3}
+    buttons: {"Alarms":1,"Exit":2}
   }).then(function(button) {
     if (button==1) {
       showMainMenu();

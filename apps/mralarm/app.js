@@ -30,6 +30,9 @@ function getDecimalTime(t) {
   return t.getHours()+(t.getMinutes()/60)+(t.getSeconds()/3600);
 }
 
+// get info about the next alarm for the main screen
+//
+// todo: clean up this code, make it more efficient
 function getNextAlarm() {
   let nextAlarmInfo = {};
   let nextAlarm;
@@ -49,13 +52,13 @@ function getNextAlarm() {
     }
     return nextAlarmInfo;
   } else {
-    // next alarm is in the future or there is none
+    // next alarm is on a future day?
     for (let i=1; i<7; i++) {
       let dayAlarms = alarms.filter(a=>a.on && a.days[(dow+i)%7] === true);
       if (dayAlarms.length > 0) {
 	dayAlarms = dayAlarms.sort((a,b) => a.hr-b.hr);
 	nextAlarm = dayAlarms[0];
-	nextAlarmInfo.day = daysOfWeek[(dow+i)%7];
+	nexsAlarmInfo.day = (i==1)?"Tomorrow":daysOfWeek[(dow+i)%7];
 	nextAlarmInfo.time = formatTime(nextAlarm.hr);
 	if (nextAlarm.name && nextAlarm.name!=="") {
 	  nextAlarmInfo.name = nextAlarm.name;
@@ -237,7 +240,7 @@ function showMainScreen() {
   }
   E.showPrompt(msg,{
     title:"MrAlarm",
-    buttons: {"Alarms":1,"Exit":2}
+    buttons: {"Alarms":1,"Quick Alarm":2,"Exit":3}
   }).then(function(button) {
     if (button==1) {
       showMainMenu();

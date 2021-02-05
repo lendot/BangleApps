@@ -58,7 +58,7 @@ function getNextAlarm() {
       if (dayAlarms.length > 0) {
 	dayAlarms = dayAlarms.sort((a,b) => a.hr-b.hr);
 	nextAlarm = dayAlarms[0];
-	nexsAlarmInfo.day = (i==1)?"Tomorrow":daysOfWeek[(dow+i)%7];
+	nextAlarmInfo.day = (i==1)?"Tomorrow":daysOfWeek[(dow+i)%7];
 	nextAlarmInfo.time = formatTime(nextAlarm.hr);
 	if (nextAlarm.name && nextAlarm.name!=="") {
 	  nextAlarmInfo.name = nextAlarm.name;

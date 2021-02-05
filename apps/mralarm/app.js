@@ -3,6 +3,9 @@ Bangle.drawWidgets();
 
 const s = require("Storage");
 
+const daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+
 let alarms = s.readJSON("mralarm.json",1)||[];
 alarms = alarms.sort((a,b)=>a.hr-b.hr);
 
@@ -19,6 +22,49 @@ function getCurrentHr() {
 
 function onOff(v) {
   return v?"On":"Off";
+}
+
+// get a decimal representation of current time
+// e.g. 12:30 = 12.5, 7:12 = 7.2
+function getDecimalTime(t) {
+  return t.getHours()+(t.getMinutes()/60)+(t.getSeconds()/3600);
+}
+
+function getNextAlarm() {
+  let nextAlarmInfo = {};
+  let nextAlarm;
+  let now = new Date();
+  let dow = now.getDay(); // day of week 0-6
+  let nowTime = getDecimalTime(now);
+  let alarmsLeftToday = alarms.filter(a=>a.on && a.days[dow] === true &&
+				      nowTime <= a.hr);
+  if (alarmsLeftToday.length > 0) {
+    // next alarm is today
+    alarmsLeftToday = alarmsLeftToday.sort((a,b) => a.hr-b.hr);
+    nextAlarm = alarmsLeftToday[0];
+    nextAlarmInfo.day = "Today";
+    nextAlarmInfo.time = formatTime(nextAlarm.hr);
+    if (nextAlarm.name && nextAlarm.name!=="") {
+      nextAlarmInfo.name = nextAlarm.name;
+    }
+    return nextAlarmInfo;
+  } else {
+    // next alarm is in the future or there is none
+    for (let i=1; i<7; i++) {
+      let dayAlarms = alarms.filter(a=>a.on && a.days[(dow+i)%7] === true);
+      if (dayAlarms.length > 0) {
+	dayAlarms = dayAlarms.sort((a,b) => a.hr-b.hr);
+	nextAlarm = dayAlarms[0];
+	nextAlarmInfo.day = daysOfWeek[(dow+i)%7];
+	nextAlarmInfo.time = formatTime(nextAlarm.hr);
+	if (nextAlarm.name && nextAlarm.name!=="") {
+	  nextAlarmInfo.name = nextAlarm.name;
+	}
+	return nextAlarmInfo;
+      }
+    }
+  }
+  return null; // no upcoming alarms found
 }
 
 function alarmDaysAbbrev(days) {
@@ -45,7 +91,7 @@ function showMainMenu() {
     if (alarm.name) {
       txt += " "+alarm.name;
     }
-    txt += " "+alarmDaysAbbrev(alarm.days);
+    // txt += " "+alarmDaysAbbrev(alarm.days);
     menu[txt] = function() {
       E.showMenu(); // remove the current menu
       editAlarm(idx);
@@ -69,8 +115,6 @@ function editAlarm(alarmIndex) {
 
   let alarmNames = ['','Wake up','Bedtime','Glucose'];
   let nameIndex = 0;
-
-  let daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
   if (!newAlarm) {
     let a = alarms[alarmIndex];
@@ -181,7 +225,16 @@ function editAlarm(alarmIndex) {
 
 // show the screen that displays on app launch
 function showMainScreen() {
-  let msg="Next Alarm:\n8:00";
+  let nextAlarm = getNextAlarm();
+  let msg;
+  if (nextAlarm === null) {
+    msg = "No upcoming alarms";
+  } else {
+    msg = "Next alarm:\n"+nextAlarm.day+"\n"+nextAlarm.time;
+    if (nextAlarm.name !== undefined) {
+      msg += "\n"+nextAlarm.name;
+    }
+  }
   E.showPrompt(msg,{
     title:"MrAlarm",
     buttons: {"Alarms":1,"Exit":2}

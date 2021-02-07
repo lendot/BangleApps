@@ -2601,6 +2601,7 @@
   "tags": "widget",
   "allow_emulator":true,
   "readme": "README.md",
+  "custom": "custom.html",
   "storage": [
     {"name":"mralarm.wid.js","url":"widget.js"},
     {"name":"mralarm.app.js","url":"app.js"},

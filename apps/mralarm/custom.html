@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="../../css/spectre.min.css">
+  </head>
+  <body>
+    <p>Comma-separated list of alarm names: <input type="text" id="alarmNames" class="form-input" value="foo,bar,baz"></p>
+    <p><button id="upload" class="btn btn-primary">Upload</button></p>
+
+    <script src="../../core/lib/customize.js"></script>
+
+    <script>
+      // When the 'upload' button is clicked...
+      document.getElementById("upload").addEventListener("click", function() {
+        // get the text to add
+        var names = document.getElementById("alarmNames").value;
+	var namesArray = names.split(',');
+	
+	var content = JSON.stringify(namesArray);
+	
+	sendCustomizedApp({
+	  storage:[
+	    {name:"mralarm-names.json",content:content}
+	  ]});
+      };
+	
+    </script>
+
+  </body>
+</html>

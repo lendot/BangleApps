@@ -9,6 +9,10 @@ const daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday',
 let alarms = s.readJSON("mralarm.json",1)||[];
 alarms = alarms.sort((a,b)=>a.hr-b.hr);
 
+let alarmNames = s.readJSON("mralarm-names.json",1)||['Wake Up','Breakfast','Lunch','Dinner','Meds','Walk Dog','Bedtime'];
+alarmNames.unshift(""); // put blank (i.e., no-name) option first
+
+
 function formatTime(t) {
   let hrs = (0|t).toString(); // get integer portion of t, i.e., the hour
   let mins = Math.round((t-hrs)*60).toString();
@@ -116,7 +120,6 @@ function editAlarm(alarmIndex) {
   let name = "";
   let days = [true,true,true,true,true,true,true]; // 0-6 sun-sat
 
-  let alarmNames = ['','Wake up','Bedtime','Glucose'];
   let nameIndex = 0;
 
   if (!newAlarm) {

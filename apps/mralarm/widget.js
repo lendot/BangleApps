@@ -1,4 +1,7 @@
 (() => {
+  console.log("mralarm.wid.js loading");
+
+
   const s = require('Storage');
   
   const ALARMS_FILE = "mralarm.json";
@@ -43,6 +46,9 @@
       nextAlarm = null;
       return;
     }
+
+    // todo: reliably handle case where next alarm is after today
+    
     alarmsLeftToday = alarmsLeftToday.sort((a,b)=>a.hr-b.hr);
     nextAlarm = alarmsLeftToday[0];
     let timeUntil = getTimeDelta(nowTime,nextAlarm.hr);

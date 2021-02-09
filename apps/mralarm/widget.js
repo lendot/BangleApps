@@ -1,6 +1,4 @@
 (() => {
-  console.log("mralarm.wid.js loading");
-
 
   const s = require('Storage');
   

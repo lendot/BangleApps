@@ -41,11 +41,11 @@
     let alarmsLeftToday = alarms.filter(a=>a.on && a.days[dow] === true &&
 					nowTime <= a.hr);
     if (alarmsLeftToday.length == 0) {
+      // no alarms the rest of this day; check again at midnight.
       nextAlarm = null;
+      setTimeout(updateAlarms,getTimeDelta(nowTime,24.0));
       return;
     }
-
-    // todo: reliably handle case where next alarm is after today
     
     alarmsLeftToday = alarmsLeftToday.sort((a,b)=>a.hr-b.hr);
     nextAlarm = alarmsLeftToday[0];

@@ -86,7 +86,8 @@
     g.reset();
     g.clearRect(this.x, this.y, this.x+WIDTH, this.y+HEIGHT);
     g.setColor(-1); // white
-    g.drawImage(atob("GBgBAAAAAAAAABgADhhwDDwwGP8YGf+YMf+MM//MM//MA//AA//AA//AA//AA//AA//AB//gD//wD//wAAAAADwAABgAAAAAAAAA"),this.x,this.y);
+//g.drawImage(atob("GBgBAAAAAAAAABgADhhwDDwwGP8YGf+YMf+MM//MM//MA//AA//AA//AA//AA//AA//AB//gD//wD//wAAAAADwAABgAAAAAAAAA"),this.x,this.y);
+    g.drawImage(atob("FxeBAAAAAAAAAAHwAAQQABAQAEAQAIAgAQBABABACACAEAEAJBIAlFIBEEQEAAQQAARAAASAAAn///ACIAAEQAAHAAAAAAA="),this.x,this.y);
   }
 
   // called by app when mralarm.json has changed

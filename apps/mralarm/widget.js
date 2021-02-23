@@ -86,8 +86,10 @@
     g.reset();
     g.clearRect(this.x, this.y, this.x+WIDTH, this.y+HEIGHT);
     g.setColor(-1); // white
-//g.drawImage(atob("GBgBAAAAAAAAABgADhhwDDwwGP8YGf+YMf+MM//MM//MA//AA//AA//AA//AA//AA//AB//gD//wD//wAAAAADwAABgAAAAAAAAA"),this.x,this.y);
-    g.drawImage(atob("FxeBAAAAAAAAAAHwAAQQABAQAEAQAIAgAQBABABACACAEAEAJBIAlFIBEEQEAAQQAARAAASAAAn///ACIAAEQAAHAAAAAAA="),this.x,this.y);
+
+    a.drawImage(atob("FxeEAAAAAAD////wAAAAAAAAAP/////wAAAAAAAA//AAAP/wAAAAAAD/8AAAAP/wAAAAAA/yAAAAAv8AAAAAAv8AAAAAD/IAAAAA//AAAAAA//AAAAAP8gAAAAAC/wAAAAD/AvIAAvIP8AAAAC/w//AA//D/IAAAD/8P/wAP/w//AAAA/yDw8ADw8C/wAAD/8A//AA//AP/wAP/wAP/wAP/wAP/w//AAAvIAAvIAAP//8gAAAAAAAAAAAv//AAAAAAAAAAAAD///////////////////////////////8AAAAA/wAP8AAAAAAAAAAP8AD/AAAAAAAAAAAv8v8gAAAAAAAAAAAv/yAAAAAAA="),this.x,this.y);
+
+//    g.drawImage(atob("FxeBAAAAAAAAAAHwAAQQABAQAEAQAIAgAQBABABACACAEAEAJBIAlFIBEEQEAAQQAARAAASAAAn///ACIAAEQAAHAAAAAAA="),this.x,this.y);
   }
 
   // called by app when mralarm.json has changed
